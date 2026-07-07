@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useUIStore } from "../../store/uiStore";
-import { exportBackup, importBackup, saveBackupToDisk, loadBackupFromDisk } from "../../utils/backup";
+import { exportWithDialog, importWithDialog } from "../../utils/bridge";
 import { FiX, FiDownload, FiUpload, FiFolder } from "react-icons/fi";
 
 export default function SettingsPanel() {
@@ -9,10 +9,13 @@ export default function SettingsPanel() {
 
   const handleExport = async () => {
     try {
-      setBackupStatus("Exporting...");
-      const data = await exportBackup();
-      saveBackupToDisk(data);
-      setBackupStatus("Backup saved to disk!");
+      setBackupStatus("Select location...");
+      const result = await exportWithDialog();
+      if (result === "ok") {
+        setBackupStatus("Backup saved successfully!");
+      } else {
+        setBackupStatus("Export cancelled.");
+      }
     } catch (e) {
       setBackupStatus(`Export failed: ${e}`);
     }
@@ -21,10 +24,12 @@ export default function SettingsPanel() {
   const handleImport = async () => {
     try {
       setBackupStatus("Select a backup file...");
-      const text = await loadBackupFromDisk();
-      setBackupStatus("Importing...");
-      await importBackup(text);
-      setBackupStatus("Import successful! Reload to see changes.");
+      const result = await importWithDialog();
+      if (result === "ok") {
+        setBackupStatus("Import successful! Reload to see changes.");
+      } else {
+        setBackupStatus("Import cancelled.");
+      }
     } catch (e) {
       setBackupStatus(`Import failed: ${e}`);
     }
@@ -46,7 +51,7 @@ export default function SettingsPanel() {
         <div className="settings-section">
           <h3>Backup & Restore</h3>
           <p className="settings-desc">
-            Export all your books, chapters, and notes as a JSON file on your computer.
+            Export all your journals, chapters, and entries as a JSON file on your computer.
             Import a previous backup to restore your data.
           </p>
           <div className="settings-buttons">
@@ -63,7 +68,7 @@ export default function SettingsPanel() {
           <h3>Data Location</h3>
           <p className="settings-desc">
             <FiFolder size={14} style={{ marginRight: 6 }} />
-            Your notes are stored locally in an SQLite database.
+            Your notes are stored locally in a JSON file.
             Use the backup feature above to save a portable copy.
           </p>
         </div>

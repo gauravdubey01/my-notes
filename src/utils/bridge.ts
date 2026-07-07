@@ -29,6 +29,18 @@ async function call<T>(fn: () => any, fallback?: T): Promise<T> {
   }
 }
 
+async function callRaw(fn: () => any, fallback?: string): Promise<string> {
+  try {
+    const bridge = getBridge();
+    if (!bridge) return fallback ?? "";
+    const result = await fn();
+    if (typeof result === "string") return result;
+    return String(result);
+  } catch {
+    return fallback ?? "";
+  }
+}
+
 // ——— Books ———
 
 export async function getBooks(): Promise<any[]> {
@@ -132,4 +144,16 @@ export async function exportBackup(): Promise<string> {
 
 export async function importBackup(json: string): Promise<void> {
   return call(() => getBridge().ImportBackup(json));
+}
+
+export async function exportWithDialog(): Promise<string> {
+  return call(() => getBridge().ExportWithDialog(), "cancelled");
+}
+
+export async function importWithDialog(): Promise<string> {
+  return call(() => getBridge().ImportWithDialog(), "cancelled");
+}
+
+export async function pickImageBase64(): Promise<string> {
+  return callRaw(() => getBridge().PickImageBase64(), "");
 }

@@ -34,7 +34,7 @@ export default function Sidebar() {
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm("Delete this book and all its chapters?")) {
+    if (confirm("Delete this journal and all its chapters?")) {
       await deleteBook(id);
     }
   };
@@ -42,7 +42,7 @@ export default function Sidebar() {
   return (
     <div className="sidebar">
       <div className="sidebar-header">
-        <h2>Books</h2>
+        <h2>Journals</h2>
         <button className="icon-btn" onClick={() => setShowAddForm(!showAddForm)}>
           <FiPlus size={16} />
         </button>
@@ -52,7 +52,7 @@ export default function Sidebar() {
         <div className="add-form">
           <input
             type="text"
-            placeholder="Book title..."
+            placeholder="Journal title..."
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleCreate()}
@@ -80,7 +80,7 @@ export default function Sidebar() {
             ))}
           </div>
           <button className="btn btn-primary" onClick={handleCreate}>
-            Create Book
+            Create Journal
           </button>
         </div>
       )}

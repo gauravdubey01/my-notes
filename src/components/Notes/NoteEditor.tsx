@@ -77,7 +77,7 @@ export default function NoteEditor() {
       <div className="note-editor empty-state">
         <div className="empty-content">
           <span className="empty-icon">✍️</span>
-          <p>Select a note or create a new one</p>
+          <p>Select an entry or create a new one</p>
         </div>
       </div>
     );
@@ -147,7 +147,7 @@ export default function NoteEditor() {
         onChange={(e) => setTitle(e.target.value)}
         onBlur={handleTitleBlur}
         onKeyDown={handleTitleKeyDown}
-        placeholder="Note title..."
+        placeholder="Entry title..."
       />
 
       <TiptapEditor

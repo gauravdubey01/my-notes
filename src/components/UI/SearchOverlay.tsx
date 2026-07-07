@@ -73,7 +73,7 @@ export default function SearchOverlay() {
             ref={inputRef}
             type="text"
             className="search-input"
-            placeholder="Search notes..."
+            placeholder="Search entries..."
             value={query}
             onChange={(e) => handleChange(e.target.value)}
             onKeyDown={(e) => e.key === "Escape" && setShowSearch(false)}

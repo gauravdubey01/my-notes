@@ -57,6 +57,33 @@ body {
   background: var(--bg-primary);
 }
 
+/* ---------- FOOTER ---------- */
+.app-footer {
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: var(--bg-white);
+  border-top: 1px solid var(--border-color);
+  flex-shrink: 0;
+  font-size: 11px;
+}
+
+.footer-made {
+  color: var(--text-muted);
+}
+
+.footer-kofi {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-kofi:hover {
+  color: #FF5E5B;
+}
+
 /* ---------- TITLE BAR ---------- */
 .title-bar {
   height: var(--titlebar-height);
@@ -785,10 +812,11 @@ body {
 }
 
 .ProseMirror img {
-  max-width: 100%;
+  max-width: 75%;
   height: auto;
   border-radius: var(--radius-sm);
   margin: 0.6em 0;
+  display: block;
 }
 
 .ProseMirror table {

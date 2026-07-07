@@ -1,5 +1,4 @@
 import { useEffect, useCallback } from "react";
-import { invoke } from "@tauri-apps/api/core";
 import { useBookStore } from "./store/bookStore";
 import { useChapterStore } from "./store/chapterStore";
 import { useNoteStore } from "./store/noteStore";
@@ -48,6 +47,12 @@ export default function App() {
         <Sidebar />
         <ChapterList />
         <NoteEditor />
+      </div>
+      <div className="app-footer">
+        <span className="footer-made">Made by Gaurav Dubey</span>
+        <a className="footer-kofi" href="https://ko-fi.com/gauravdubeypro" target="_blank" title="Support me on Ko-fi">
+          ☕ Support on Ko-fi
+        </a>
       </div>
       {showSettings && <SettingsPanel />}
       {showSearch && <SearchOverlay />}

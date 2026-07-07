@@ -10,6 +10,7 @@ import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
 import ImageExtension from "@tiptap/extension-image";
 import { useEffect, useCallback } from "react";
+import { pickImageBase64 } from "../../utils/bridge";
 
 interface TiptapEditorProps {
   content: string;
@@ -56,10 +57,10 @@ export default function TiptapEditor({
 
   if (!editor) return null;
 
-  const addImage = useCallback(() => {
-    const url = prompt("Image URL:");
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
+  const addImage = useCallback(async () => {
+    const dataUrl = await pickImageBase64();
+    if (dataUrl) {
+      editor.chain().focus().setImage({ src: dataUrl }).run();
     }
   }, [editor]);
 

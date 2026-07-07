@@ -44,7 +44,7 @@ export default function ChapterList() {
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm("Delete this chapter and all its notes?")) {
+    if (confirm("Delete this chapter and all its entries?")) {
       await deleteChapter(id);
     }
   };
@@ -54,7 +54,7 @@ export default function ChapterList() {
       <div className="chapter-list empty-state">
         <div className="empty-content">
           <span className="empty-icon">📖</span>
-          <p>Select or create a book to begin</p>
+          <p>Select or create a journal to begin</p>
         </div>
       </div>
     );
@@ -136,7 +136,7 @@ export default function ChapterList() {
                   <span className="chapter-title">{chapter.title}</span>
                 )}
                 <span className="chapter-count">
-                  {notes.filter((n) => n.chapter_id === chapter.id).length} notes
+                  {notes.filter((n) => n.chapter_id === chapter.id).length} entries
                 </span>
               </div>
               <div className="chapter-actions">
@@ -185,7 +185,7 @@ export default function ChapterList() {
                   className="add-note-btn"
                   onClick={() => createNote(chapter.id)}
                 >
-                  <FiPlus size={14} /> New note
+                  <FiPlus size={14} /> New entry
                 </button>
               </div>
             )}

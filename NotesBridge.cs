@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Forms;
 
 namespace MyNotes
 {
@@ -110,6 +111,58 @@ namespace MyNotes
             Directory.CreateDirectory(_dataDir);
             _dataPath = Path.Combine(_dataDir, "data.json");
             _data = Load();
+            SeedIfEmpty();
+        }
+
+        private void SeedIfEmpty()
+        {
+            if (_data.books.Count > 0) return;
+
+            for (int j = 1; j <= 3; j++)
+            {
+                var book = new Book
+                {
+                    id = NewId(),
+                    title = "Journal " + j,
+                    color = new[] { "#8B7355", "#2C5F2D", "#5B7B9A" }[j - 1],
+                    icon = new[] { "\U0001F4D6", "\U0001F4D8", "\U0001F4DA" }[j - 1],
+                    sort_order = j - 1,
+                    created_at = Now(),
+                    updated_at = Now(),
+                };
+                _data.books.Add(book);
+
+                for (int c = 1; c <= 3; c++)
+                {
+                    var chapter = new Chapter
+                    {
+                        id = NewId(),
+                        book_id = book.id,
+                        title = "Chapter " + j + "." + c,
+                        color = "",
+                        sort_order = c - 1,
+                        created_at = Now(),
+                        updated_at = Now(),
+                    };
+                    _data.chapters.Add(chapter);
+
+                    for (int n = 1; n <= 3; n++)
+                    {
+                        var note = new Note
+                        {
+                            id = NewId(),
+                            chapter_id = chapter.id,
+                            title = "Entry " + j + "." + c + "." + n,
+                            content = "<p>Welcome to <strong>Entry " + j + "." + c + "." + n + "</strong>! This is a sample entry in " + book.title + ", " + chapter.title + ".</p><p>Start writing your thoughts here.</p>",
+                            sort_order = n - 1,
+                            created_at = Now(),
+                            updated_at = Now(),
+                        };
+                        _data.notes.Add(note);
+                    }
+                }
+            }
+            Save();
         }
 
         private AppData Load()
@@ -444,6 +497,68 @@ namespace MyNotes
             {
                 throw new Exception("Import failed: " + ex.Message);
             }
+        }
+
+        public string ExportWithDialog()
+        {
+            using (var dialog = new SaveFileDialog())
+            {
+                dialog.Title = "Export Backup";
+                dialog.Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*";
+                dialog.DefaultExt = "json";
+                dialog.FileName = "my-notes-backup-" + DateTime.Now.ToString("yyyy-MM-dd") + ".json";
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    string json = _json.Stringify(CleanForExport());
+                    File.WriteAllText(dialog.FileName, json, Encoding.UTF8);
+                    return "ok";
+                }
+            }
+            return "cancelled";
+        }
+
+        public string ImportWithDialog()
+        {
+            using (var dialog = new OpenFileDialog())
+            {
+                dialog.Title = "Import Backup";
+                dialog.Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*";
+                dialog.DefaultExt = "json";
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    string json = File.ReadAllText(dialog.FileName, Encoding.UTF8);
+                    ImportBackup(json);
+                    return "ok";
+                }
+            }
+            return "cancelled";
+        }
+
+        public string PickImageBase64()
+        {
+            using (var dialog = new OpenFileDialog())
+            {
+                dialog.Title = "Select an Image";
+                dialog.Filter = "Image Files (*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp)|*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp|All Files (*.*)|*.*";
+                dialog.DefaultExt = "png";
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    byte[] bytes = File.ReadAllBytes(dialog.FileName);
+                    string ext = Path.GetExtension(dialog.FileName).ToLower();
+                    string mime = ext switch
+                    {
+                        ".png" => "image/png",
+                        ".jpg" or ".jpeg" => "image/jpeg",
+                        ".gif" => "image/gif",
+                        ".bmp" => "image/bmp",
+                        ".webp" => "image/webp",
+                        _ => "image/png",
+                    };
+                    string base64 = Convert.ToBase64String(bytes);
+                    return "data:" + mime + ";base64," + base64;
+                }
+            }
+            return "";
         }
     }
 
