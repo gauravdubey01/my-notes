@@ -1,0 +1,11 @@
+node_modules/
+dist/
+lib/
+*.msix
+*.msixupload
+*.exe
+*.png
+.DS_Store
+Thumbs.db
+MyNotes.exe.WebView2/
+ui-*.png
