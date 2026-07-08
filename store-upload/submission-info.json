@@ -6,15 +6,16 @@
   "version": "2.0.0",
   "description": "A precious journal — your personal notes app.",
   "packageFormats": {
+    "msix": "store-upload/MyNeatbook_2.0.0_x64.msix",
     "msi": "store-upload/msi/My Neatbook_2.0.0_x64_en-US.msi",
     "nsis": "store-upload/nsis/My Neatbook_2.0.0_x64-setup.exe",
     "standalone": "store-upload/exe/My Neatbook.exe"
   },
   "storeSubmission": {
-    "primaryPackage": "store-upload/msi/My Neatbook_2.0.0_x64_en-US.msi",
+    "primaryPackage": "store-upload/MyNeatbook_2.0.0_x64.msix",
     "architecture": "x64",
-    "installerType": "MSI",
-    "targetPlatform": "Windows 10+",
-    "requiresAdmin": true
+    "installerType": "MSIX",
+    "targetPlatform": "Windows 10+ (1809+)",
+    "requiresAdmin": false
   }
 }
