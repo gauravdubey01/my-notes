@@ -1,5 +1,5 @@
 {
-  "productName": "My Notes",
+  "productName": "My Neatbook",
   "version": "2.0.0",
   "identifier": "Gauravdubey.MyNotes",
   "build": {
@@ -11,7 +11,7 @@
   "app": {
     "windows": [
       {
-        "title": "My Notes",
+        "title": "My Neatbook",
         "width": 1200,
         "height": 800,
         "minWidth": 800,

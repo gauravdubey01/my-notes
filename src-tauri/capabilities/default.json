@@ -1,6 +1,6 @@
 {
   "identifier": "default",
-  "description": "Default capabilities for My Notes",
+  "description": "Default capabilities for My Neatbook",
   "windows": ["main"],
   "permissions": [
     "core:default",

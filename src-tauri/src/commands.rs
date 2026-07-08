@@ -348,7 +348,7 @@ pub async fn export_with_dialog(
         .file()
         .add_filter("JSON Files", &["json"])
         .set_file_name(&format!(
-            "my-notes-backup-{}.json",
+            "my-neatbook-backup-{}.json",
             chrono::Local::now().format("%Y-%m-%d")
         ))
         .blocking_save_file();

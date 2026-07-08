@@ -82,7 +82,7 @@ export default function SettingsPanel() {
         <div className="settings-section">
           <h3>About</h3>
           <p className="settings-desc">
-            My Notes v{appVersion}
+            My Neatbook v{appVersion}
             <br />
             A precious journal — your personal notes app.
           </p>

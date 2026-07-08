@@ -19,7 +19,7 @@ export default function ExitDialog({ onClose, onExit }: ExitDialogProps) {
     <div className="exit-overlay" onClick={onClose}>
       <div className="exit-dialog" onClick={(e) => e.stopPropagation()}>
         <div className="exit-header">
-          <h2>Exit My Notes?</h2>
+          <h2>Exit My Neatbook?</h2>
           <button className="icon-btn" onClick={onClose}>
             <FiX size={18} />
           </button>
@@ -27,7 +27,7 @@ export default function ExitDialog({ onClose, onExit }: ExitDialogProps) {
         <div className="exit-body">
           <p>Are you sure you want to exit?</p>
           <p className="exit-support-msg">
-            If you enjoy using <strong>My Notes</strong>, please consider supporting the creator! ❤️
+            If you enjoy using <strong>My Neatbook</strong>, please consider supporting the creator! ❤️
           </p>
         </div>
         <div className="exit-actions">

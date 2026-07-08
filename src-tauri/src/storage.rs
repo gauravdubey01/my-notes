@@ -13,7 +13,7 @@ impl AppState {
     pub fn new() -> Self {
         let data_dir = dirs::data_local_dir()
             .unwrap_or_else(|| PathBuf::from("."))
-            .join("MyNotes");
+            .join("MyNeatbook");
         std::fs::create_dir_all(&data_dir).ok();
         let data_path = data_dir.join("data.json");
 

@@ -21,7 +21,7 @@ export default function TitleBar() {
     <div className="title-bar">
       <div className="title-bar-left">
         <span className="app-logo">📖</span>
-        <h1 className="app-title">My Notes</h1>
+        <h1 className="app-title">My Neatbook</h1>
       </div>
       <div className="title-bar-center">
         {selectedBookId && (
