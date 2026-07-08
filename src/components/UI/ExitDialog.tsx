@@ -1,14 +1,14 @@
 import { openUrl } from "@tauri-apps/plugin-opener";
-import { getCurrentWindow } from "@tauri-apps/api/window";
 import { FiX, FiExternalLink, FiLogOut } from "react-icons/fi";
 
 interface ExitDialogProps {
   onClose: () => void;
+  onExit: () => void;
 }
 
-export default function ExitDialog({ onClose }: ExitDialogProps) {
+export default function ExitDialog({ onClose, onExit }: ExitDialogProps) {
   const handleExit = () => {
-    getCurrentWindow().destroy();
+    onExit();
   };
 
   const handleSupport = () => {

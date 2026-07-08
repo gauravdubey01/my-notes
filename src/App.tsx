@@ -101,7 +101,7 @@ export default function App() {
       </div>
       {showSettings && <SettingsPanel />}
       {showSearch && <SearchOverlay />}
-      {showExitDialog && <ExitDialog onClose={() => setShowExitDialog(false)} />}
+      {showExitDialog && <ExitDialog onClose={() => setShowExitDialog(false)} onExit={() => { exitHandledRef.current = true; getCurrentWindow().close(); }} />}
       {showTutorial && <TutorialOverlay onDismiss={handleTutorialDismiss} />}
     </div>
   );
