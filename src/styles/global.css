@@ -537,12 +537,31 @@ body {
   gap: 4px;
 }
 
+.save-status {
+  font-size: 11px;
+  font-weight: 500;
+  margin-right: 4px;
+  white-space: nowrap;
+}
+
+.save-status.saving {
+  color: var(--text-muted);
+}
+
+.save-status.saved {
+  color: #2C5F2D;
+}
+
+.save-status.error {
+  color: #C44;
+}
+
 .editor-action-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border: none;
   border-radius: var(--radius-sm);
   background: transparent;

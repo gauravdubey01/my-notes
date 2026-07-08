@@ -1,0 +1,19 @@
+{
+  "identifier": "default",
+  "description": "Default capabilities for My Notes",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "dialog:default",
+    "dialog:allow-open",
+    "dialog:allow-save",
+    "fs:default",
+    "opener:default",
+    {
+      "identifier": "fs:scope",
+      "allow": [
+        { "path": "**" }
+      ]
+    }
+  ]
+}

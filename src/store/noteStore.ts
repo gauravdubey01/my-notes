@@ -40,6 +40,7 @@ export const useNoteStore = create<NoteState>((set, get) => ({
     set({ loading: true });
     try {
       const notes = await getNotes(chapterId);
+      // noteStore: loaded ${notes.length} notes
       set({ notes, loading: false });
     } catch (e) {
       console.error("Failed to load notes", e);
@@ -49,7 +50,9 @@ export const useNoteStore = create<NoteState>((set, get) => ({
 
   createNote: async (chapterId) => {
     const note = await bridgeCreateNote(chapterId);
-    set((s) => ({ notes: [note, ...s.notes], selectedNoteId: note.id }));
+    if (note && note.id) {
+      set((s) => ({ notes: [note, ...s.notes], selectedNoteId: note.id }));
+    }
     return note;
   },
 

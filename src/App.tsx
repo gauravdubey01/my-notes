@@ -1,4 +1,6 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
+import { getVersion } from "@tauri-apps/api/app";
+import { openUrl } from "@tauri-apps/plugin-opener";
 import { useBookStore } from "./store/bookStore";
 import { useChapterStore } from "./store/chapterStore";
 import { useNoteStore } from "./store/noteStore";
@@ -16,6 +18,11 @@ export default function App() {
     useChapterStore();
   const { notes, selectedNoteId, selectNote, loadNotes } = useNoteStore();
   const { showSettings, showSearch } = useUIStore();
+  const [appVersion, setAppVersion] = useState("");
+
+  useEffect(() => {
+    getVersion().then(setAppVersion);
+  }, []);
 
   useEffect(() => {
     loadBooks();
@@ -50,7 +57,8 @@ export default function App() {
       </div>
       <div className="app-footer">
         <span className="footer-made">Made by Gaurav Dubey</span>
-        <a className="footer-kofi" href="https://ko-fi.com/gauravdubeypro" target="_blank" title="Support me on Ko-fi">
+        <span className="footer-version">v{appVersion}</span>
+        <a className="footer-kofi" href="#" onClick={(e) => { e.preventDefault(); openUrl("https://ko-fi.com/gauravdubeypro"); }} title="Support me on Ko-fi">
           ☕ Support on Ko-fi
         </a>
       </div>

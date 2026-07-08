@@ -1,14 +1,19 @@
 {
   "name": "my-notes",
   "private": true,
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "tauri": "tauri"
   },
   "dependencies": {
+    "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-dialog": "^2",
+    "@tauri-apps/plugin-fs": "^2",
+    "@tauri-apps/plugin-opener": "^2.5.4",
     "@tiptap/extension-color": "^2.0.0",
     "@tiptap/extension-highlight": "^2.0.0",
     "@tiptap/extension-image": "^2.0.0",

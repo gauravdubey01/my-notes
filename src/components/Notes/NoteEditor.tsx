@@ -1,14 +1,15 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNoteStore } from "../../store/noteStore";
 import { useChapterStore } from "../../store/chapterStore";
 import { useBookStore } from "../../store/bookStore";
 import { formatDate } from "../../utils/db";
-import TiptapEditor from "./TiptapEditor";
+import TiptapEditor, { TiptapEditorHandle } from "./TiptapEditor";
 import {
   FiTrash2,
   FiBookmark,
   FiClock,
   FiDroplet,
+  FiSave,
 } from "react-icons/fi";
 
 const HIGHLIGHT_COLORS = [
@@ -34,16 +35,53 @@ export default function NoteEditor() {
 
   const [title, setTitle] = useState("");
   const [showColorPicker, setShowColorPicker] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<string | null>(null);
+  const editorRef = useRef<TiptapEditorHandle>(null);
+  const pendingTitleRef = useRef("");
 
   useEffect(() => {
     if (note) {
       setTitle(note.title);
+      pendingTitleRef.current = note.title;
+      setSaveStatus(null);
     }
   }, [note?.id]);
 
+  const doSave = useCallback(async () => {
+    if (!note) return;
+    const content = editorRef.current?.getHTML() ?? note.content;
+    const noteTitle = pendingTitleRef.current.trim() || "Untitled";
+    try {
+      setSaveStatus("Saving...");
+      await updateNote(note.id, { content, title: noteTitle });
+      setSaveStatus("Saved");
+    } catch {
+      setSaveStatus("Save failed");
+    }
+    setTimeout(() => setSaveStatus(null), 2000);
+  }, [note, updateNote]);
+
+  useEffect(() => {
+    if (!note) return;
+    return () => {
+      const html = editorRef.current?.getHTML();
+      const currentTitle = pendingTitleRef.current.trim() || "Untitled";
+      if (html !== undefined && (html !== note.content || currentTitle !== note.title)) {
+        updateNote(note.id, { content: html, title: currentTitle });
+      }
+    };
+  }, [note?.id]);
+
+  const handleTitleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+    pendingTitleRef.current = e.target.value;
+  }, []);
+
   const handleTitleBlur = useCallback(() => {
-    if (note && title.trim() !== note.title) {
-      updateNote(note.id, { title: title.trim() || "Untitled" });
+    if (!note) return;
+    const newTitle = title.trim() || "Untitled";
+    if (newTitle !== note.title) {
+      updateNote(note.id, { title: newTitle });
     }
   }, [note, title, updateNote]);
 
@@ -57,7 +95,7 @@ export default function NoteEditor() {
   );
 
   const handleDelete = useCallback(() => {
-    if (note && confirm("Delete this note?")) {
+    if (note && confirm("Delete this entry?")) {
       deleteNote(note.id);
     }
   }, [note, deleteNote]);
@@ -95,6 +133,18 @@ export default function NoteEditor() {
           <span className="meta-date">{formatDate(note.updated_at)}</span>
         </div>
         <div className="editor-actions">
+          <button
+            className="editor-action-btn"
+            onClick={doSave}
+            title="Save (Ctrl+S)"
+          >
+            <FiSave size={14} />
+          </button>
+          {saveStatus && (
+            <span className={`save-status ${saveStatus === "Saved" ? "saved" : saveStatus === "Saving..." ? "saving" : "error"}`}>
+              {saveStatus}
+            </span>
+          )}
           <div className="color-picker-wrapper">
             <button
               className={`editor-action-btn ${note.color ? "has-color" : ""}`}
@@ -134,7 +184,7 @@ export default function NoteEditor() {
           <button
             className="editor-action-btn danger"
             onClick={handleDelete}
-            title="Delete note"
+            title="Delete entry"
           >
             <FiTrash2 size={14} />
           </button>
@@ -144,17 +194,16 @@ export default function NoteEditor() {
       <input
         className="note-title-input"
         value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        onChange={handleTitleChange}
         onBlur={handleTitleBlur}
         onKeyDown={handleTitleKeyDown}
         placeholder="Entry title..."
       />
 
       <TiptapEditor
-        key={note.id}
+        ref={editorRef}
         content={note.content}
         noteId={note.id}
-        onUpdate={(html) => updateNote(note.id, { content: html })}
       />
     </div>
   );

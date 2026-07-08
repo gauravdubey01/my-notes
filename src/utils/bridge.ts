@@ -1,159 +1,105 @@
-function getBridge(): any {
-  const w = window as any;
-  if (w.chrome?.webview?.hostObjects?.bridge) {
-    return w.chrome.webview.hostObjects.bridge;
-  }
-  return null;
-}
-
-export function bridgeAvailable(): boolean {
-  return getBridge() !== null;
-}
-
-async function call<T>(fn: () => any, fallback?: T): Promise<T> {
-  try {
-    const bridge = getBridge();
-    if (!bridge) {
-      if (fallback !== undefined) return fallback;
-      return [] as any;
-    }
-    const result = await fn();
-    if (typeof result === "string") {
-      if (result === "null" || result === "") return null as any;
-      return JSON.parse(result);
-    }
-    return result;
-  } catch {
-    if (fallback !== undefined) return fallback;
-    return [] as any;
-  }
-}
-
-async function callRaw(fn: () => any, fallback?: string): Promise<string> {
-  try {
-    const bridge = getBridge();
-    if (!bridge) return fallback ?? "";
-    const result = await fn();
-    if (typeof result === "string") return result;
-    return String(result);
-  } catch {
-    return fallback ?? "";
-  }
-}
+import { invoke } from "@tauri-apps/api/core";
+import { open, save } from "@tauri-apps/plugin-dialog";
+import { readFile } from "@tauri-apps/plugin-fs";
 
 // ——— Books ———
 
 export async function getBooks(): Promise<any[]> {
-  return call(() => getBridge().GetBooks(), []);
+  return invoke("get_books");
 }
 
-export async function createBook(
-  title: string,
-  color: string,
-  icon: string
-): Promise<any> {
-  return call(() => getBridge().CreateBook(title, color, icon));
+export async function createBook(title: string, color: string, icon: string): Promise<any> {
+  return invoke("create_book", { title, color, icon });
 }
 
-export async function updateBook(
-  id: string,
-  updates: Record<string, any>
-): Promise<any> {
-  return call(() => getBridge().UpdateBook(id, JSON.stringify(updates)));
+export async function updateBook(id: string, updates: Record<string, any>): Promise<any> {
+  return invoke("update_book", { id, updates });
 }
 
 export async function deleteBook(id: string): Promise<void> {
-  return call(() => getBridge().DeleteBook(id));
+  return invoke("delete_book", { id });
 }
 
 export async function reorderBooks(ids: string[]): Promise<void> {
-  return call(() => getBridge().ReorderBooks(JSON.stringify(ids)));
+  return invoke("reorder_books", { ids });
 }
 
 // ——— Chapters ———
 
 export async function getChapters(bookId: string): Promise<any[]> {
-  return call(() => getBridge().GetChapters(bookId), []);
+  return invoke("get_chapters", { bookId });
 }
 
-export async function createChapter(
-  bookId: string,
-  title: string,
-  color?: string
-): Promise<any> {
-  return call(() => getBridge().CreateChapter(bookId, title, color || ""));
+export async function createChapter(bookId: string, title: string, color?: string): Promise<any> {
+  return invoke("create_chapter", { bookId, title, color: color || "" });
 }
 
-export async function updateChapter(
-  id: string,
-  updates: Record<string, any>
-): Promise<any> {
-  return call(() => getBridge().UpdateChapter(id, JSON.stringify(updates)));
+export async function updateChapter(id: string, updates: Record<string, any>): Promise<any> {
+  return invoke("update_chapter", { id, updates });
 }
 
 export async function deleteChapter(id: string): Promise<void> {
-  return call(() => getBridge().DeleteChapter(id));
+  return invoke("delete_chapter", { id });
 }
 
 export async function reorderChapters(ids: string[]): Promise<void> {
-  return call(() => getBridge().ReorderChapters(JSON.stringify(ids)));
+  return invoke("reorder_chapters", { ids });
 }
 
 // ——— Notes ———
 
 export async function getNotes(chapterId: string): Promise<any[]> {
-  return call(() => getBridge().GetNotes(chapterId), []);
+  return invoke("get_notes", { chapterId });
 }
 
 export async function createNote(chapterId: string): Promise<any> {
-  return call(() => getBridge().CreateNote(chapterId));
+  return invoke("create_note", { chapterId });
 }
 
-export async function updateNote(
-  id: string,
-  updates: Record<string, any>
-): Promise<any> {
-  return call(() => getBridge().UpdateNote(id, JSON.stringify(updates)));
+export async function updateNote(id: string, updates: Record<string, any>): Promise<any> {
+  return invoke("update_note", { id, updates });
 }
 
 export async function deleteNote(id: string): Promise<void> {
-  return call(() => getBridge().DeleteNote(id));
+  return invoke("delete_note", { id });
 }
 
 // ——— Search ———
 
 export async function searchNotes(query: string): Promise<any[]> {
-  return call(() => getBridge().SearchNotes(query), []);
+  return invoke("search_notes", { query });
 }
 
 // ——— Window ———
 
 export async function togglePin(): Promise<boolean> {
-  return call(() => getBridge().TogglePin(), false);
+  return invoke("toggle_pin");
 }
 
 export async function getPinState(): Promise<boolean> {
-  return call(() => getBridge().GetPinState(), false);
+  return invoke("get_pin_state");
+}
+
+export async function closeWindow(): Promise<void> {
+  return invoke("close_window");
+}
+
+export async function minimizeWindow(): Promise<void> {
+  return invoke("minimize_window");
 }
 
 // ——— Backup ———
 
-export async function exportBackup(): Promise<string> {
-  return call(() => getBridge().ExportBackup(), "{}");
-}
-
-export async function importBackup(json: string): Promise<void> {
-  return call(() => getBridge().ImportBackup(json));
-}
-
 export async function exportWithDialog(): Promise<string> {
-  return call(() => getBridge().ExportWithDialog(), "cancelled");
+  return invoke("export_with_dialog");
 }
 
 export async function importWithDialog(): Promise<string> {
-  return call(() => getBridge().ImportWithDialog(), "cancelled");
+  return invoke("import_backup");
 }
 
+// ——— Image picker ———
+
 export async function pickImageBase64(): Promise<string> {
-  return callRaw(() => getBridge().PickImageBase64(), "");
+  return invoke("pick_image_base64");
 }
