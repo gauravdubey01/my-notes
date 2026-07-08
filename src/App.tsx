@@ -1,5 +1,6 @@
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useState, useRef } from "react";
 import { getVersion } from "@tauri-apps/api/app";
+import { getCurrentWindow } from "@tauri-apps/api/window";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { useBookStore } from "./store/bookStore";
 import { useChapterStore } from "./store/chapterStore";
@@ -11,6 +12,8 @@ import ChapterList from "./components/Chapters/ChapterList";
 import NoteEditor from "./components/Notes/NoteEditor";
 import SettingsPanel from "./components/Settings/SettingsPanel";
 import SearchOverlay from "./components/UI/SearchOverlay";
+import ExitDialog from "./components/UI/ExitDialog";
+import TutorialOverlay from "./components/UI/TutorialOverlay";
 
 export default function App() {
   const { books, selectedBookId, selectBook, loadBooks } = useBookStore();
@@ -19,6 +22,10 @@ export default function App() {
   const { notes, selectedNoteId, selectNote, loadNotes } = useNoteStore();
   const { showSettings, showSearch } = useUIStore();
   const [appVersion, setAppVersion] = useState("");
+  const [showExitDialog, setShowExitDialog] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
+  const exitHandledRef = useRef(false);
+  const closeUnlistenRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     getVersion().then(setAppVersion);
@@ -43,6 +50,36 @@ export default function App() {
     }
   }, [selectedChapterId, loadNotes, selectNote]);
 
+  useEffect(() => {
+    const tutorialSeen = localStorage.getItem("tutorialSeen");
+    if (!tutorialSeen) {
+      setShowTutorial(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    const setupCloseHandler = async () => {
+      const window = getCurrentWindow();
+      const unlisten = await window.onCloseRequested(async (event) => {
+        if (exitHandledRef.current) {
+          return;
+        }
+        event.preventDefault();
+        setShowExitDialog(true);
+      });
+      closeUnlistenRef.current = unlisten;
+    };
+    setupCloseHandler();
+    return () => {
+      closeUnlistenRef.current?.();
+    };
+  }, []);
+
+  const handleTutorialDismiss = useCallback(() => {
+    localStorage.setItem("tutorialSeen", "true");
+    setShowTutorial(false);
+  }, []);
+
   const selectedBook = books.find((b) => b.id === selectedBookId);
   const selectedChapter = chapters.find((c) => c.id === selectedChapterId);
   const selectedNote = notes.find((n) => n.id === selectedNoteId);
@@ -64,6 +101,8 @@ export default function App() {
       </div>
       {showSettings && <SettingsPanel />}
       {showSearch && <SearchOverlay />}
+      {showExitDialog && <ExitDialog onClose={() => setShowExitDialog(false)} />}
+      {showTutorial && <TutorialOverlay onDismiss={handleTutorialDismiss} />}
     </div>
   );
 }

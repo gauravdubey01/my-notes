@@ -1224,3 +1224,244 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);
 }
+
+/* ---------- EXIT DIALOG ---------- */
+.exit-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.exit-dialog {
+  background: var(--bg-white);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  width: 400px;
+  max-width: 90vw;
+  overflow: hidden;
+}
+
+.exit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 0;
+}
+
+.exit-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.exit-body {
+  padding: 16px 24px;
+}
+
+.exit-body p {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.exit-support-msg {
+  font-size: 14px;
+  color: var(--accent);
+  padding: 12px;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.exit-actions {
+  display: flex;
+  gap: 8px;
+  padding: 0 24px 20px;
+}
+
+.exit-actions .btn {
+  flex: 1;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* ---------- TUTORIAL OVERLAY ---------- */
+.tutorial-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 3000;
+}
+
+.tutorial-highlight {
+  position: absolute;
+  border-radius: 12px;
+  box-shadow: 0 0 0 4px var(--accent-light), 0 0 0 9999px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.tutorial-highlight.active {
+  opacity: 1;
+}
+
+.tutorial-highlight--sidebar {
+  top: 50px;
+  left: 0;
+  width: 240px;
+  height: calc(100% - 100px);
+  border-radius: 0 12px 12px 0;
+}
+
+.tutorial-highlight--chapter-list {
+  top: 50px;
+  left: 240px;
+  width: 260px;
+  height: calc(100% - 100px);
+}
+
+.tutorial-highlight--editor {
+  top: 50px;
+  right: 0;
+  left: 500px;
+  height: calc(100% - 100px);
+  border-radius: 12px 0 0 12px;
+}
+
+.tutorial-highlight--title-bar {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  border-radius: 0 0 12px 12px;
+}
+
+.tutorial-highlight--editor-toolbar {
+  top: 95px;
+  right: 20px;
+  left: 520px;
+  height: 42px;
+  border-radius: 8px;
+}
+
+.tutorial-tooltip {
+  position: fixed;
+  background: var(--bg-white);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  padding: 20px;
+  max-width: 380px;
+  z-index: 3001;
+}
+
+.tutorial-arrow {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: var(--bg-white);
+  transform: rotate(45deg);
+}
+
+.tutorial-arrow--left {
+  left: -5px;
+  top: 50%;
+  margin-top: -6px;
+}
+
+.tutorial-arrow--right {
+  right: -5px;
+  top: 50%;
+  margin-top: -6px;
+}
+
+.tutorial-arrow--top {
+  top: -5px;
+  left: 50%;
+  margin-left: -6px;
+}
+
+.tutorial-arrow--bottom {
+  bottom: -5px;
+  left: 50%;
+  margin-left: -6px;
+}
+
+.tutorial-step-indicator {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.tutorial-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border-color);
+  transition: background 0.2s;
+}
+
+.tutorial-dot.active {
+  background: var(--accent);
+  width: 24px;
+  border-radius: 4px;
+}
+
+.tutorial-dot.done {
+  background: var(--accent-light);
+}
+
+.tutorial-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  margin: 0 0 8px;
+  color: var(--text-primary);
+}
+
+.tutorial-desc {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0 0 16px;
+}
+
+.tutorial-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tutorial-nav {
+  display: flex;
+  gap: 8px;
+}
+
+.tutorial-nav .btn {
+  gap: 4px;
+  font-size: 13px;
+  padding: 6px 14px;
+}
+
+.tutorial-skip {
+  font-size: 13px;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.tutorial-skip:hover {
+  color: var(--text-secondary);
+  background: var(--bg-secondary);
+}
