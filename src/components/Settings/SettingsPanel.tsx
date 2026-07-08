@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getVersion } from "@tauri-apps/api/app";
 import { useUIStore } from "../../store/uiStore";
 import { exportWithDialog, importWithDialog } from "../../utils/bridge";
 import { FiX, FiDownload, FiUpload, FiFolder } from "react-icons/fi";
@@ -6,6 +7,11 @@ import { FiX, FiDownload, FiUpload, FiFolder } from "react-icons/fi";
 export default function SettingsPanel() {
   const { setShowSettings } = useUIStore();
   const [backupStatus, setBackupStatus] = useState<string>("");
+  const [appVersion, setAppVersion] = useState("");
+
+  useEffect(() => {
+    getVersion().then(setAppVersion);
+  }, []);
 
   const handleExport = async () => {
     try {
@@ -76,7 +82,7 @@ export default function SettingsPanel() {
         <div className="settings-section">
           <h3>About</h3>
           <p className="settings-desc">
-            My Notes v1.0.0
+            My Notes v{appVersion}
             <br />
             A precious journal — your personal notes app.
           </p>
