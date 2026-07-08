@@ -1,0 +1,20 @@
+{
+  "appName": "My Neatbook",
+  "appIdentity": "Gauravdubey.MyNotes",
+  "publisher": "Gaurav Dubey",
+  "publisherCN": "CN=0A36019C-61EA-47F2-A9AE-D3B27D5E13D4",
+  "version": "2.0.0",
+  "description": "A precious journal — your personal notes app.",
+  "packageFormats": {
+    "msi": "store-upload/msi/My Neatbook_2.0.0_x64_en-US.msi",
+    "nsis": "store-upload/nsis/My Neatbook_2.0.0_x64-setup.exe",
+    "standalone": "store-upload/exe/My Neatbook.exe"
+  },
+  "storeSubmission": {
+    "primaryPackage": "store-upload/msi/My Neatbook_2.0.0_x64_en-US.msi",
+    "architecture": "x64",
+    "installerType": "MSI",
+    "targetPlatform": "Windows 10+",
+    "requiresAdmin": true
+  }
+}
