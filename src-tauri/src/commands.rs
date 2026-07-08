@@ -328,7 +328,7 @@ pub async fn get_pin_state(state: State<'_, AppState>) -> Result<bool, String> {
 
 #[tauri::command]
 pub async fn close_window(window: tauri::Window) -> Result<(), String> {
-    window.close().map_err(|e| e.to_string())
+    window.destroy().map_err(|e| e.to_string())
 }
 
 #[tauri::command]

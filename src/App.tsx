@@ -2,6 +2,7 @@ import { useEffect, useCallback, useState, useRef } from "react";
 import { getVersion } from "@tauri-apps/api/app";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { openUrl } from "@tauri-apps/plugin-opener";
+import { closeWindow } from "./utils/bridge";
 import { useBookStore } from "./store/bookStore";
 import { useChapterStore } from "./store/chapterStore";
 import { useNoteStore } from "./store/noteStore";
@@ -24,7 +25,6 @@ export default function App() {
   const [appVersion, setAppVersion] = useState("");
   const [showExitDialog, setShowExitDialog] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
-  const exitHandledRef = useRef(false);
   const closeUnlistenRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
@@ -61,9 +61,6 @@ export default function App() {
     const setupCloseHandler = async () => {
       const window = getCurrentWindow();
       const unlisten = await window.onCloseRequested(async (event) => {
-        if (exitHandledRef.current) {
-          return;
-        }
         event.preventDefault();
         setShowExitDialog(true);
       });
@@ -101,7 +98,7 @@ export default function App() {
       </div>
       {showSettings && <SettingsPanel />}
       {showSearch && <SearchOverlay />}
-      {showExitDialog && <ExitDialog onClose={() => setShowExitDialog(false)} onExit={() => { exitHandledRef.current = true; getCurrentWindow().close(); }} />}
+      {showExitDialog && <ExitDialog onClose={() => setShowExitDialog(false)} onExit={() => closeWindow()} />}
       {showTutorial && <TutorialOverlay onDismiss={handleTutorialDismiss} />}
     </div>
   );
