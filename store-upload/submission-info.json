@@ -1,10 +1,15 @@
 {
   "appName": "My Neatbook",
-  "appIdentity": "Gauravdubey.MyNotes",
+  "storeId": "9N7PTCT1JLW9",
+  "appIdentity": "Gauravdubey.Neatbook",
+  "pfn": "Gauravdubey.Neatbook_kszyt8a4ex85c",
+  "packageSid": "S-1-15-2-2269419860-3498065483-3428079597-1327418565-4052458588-4220793708-2895701867",
   "publisher": "Gaurav Dubey",
   "publisherCN": "CN=0A36019C-61EA-47F2-A9AE-D3B27D5E13D4",
+  "publisherDisplayName": "Gaurav_dubey",
   "version": "2.0.0",
   "description": "A precious journal — your personal notes app.",
+  "privacyPolicy": "https://gauravdubey01.github.io/my-notes/privacy-policy.html",
   "packageFormats": {
     "msix": "store-upload/MyNeatbook_2.0.0_x64.msix",
     "msi": "store-upload/msi/My Neatbook_2.0.0_x64_en-US.msi",
